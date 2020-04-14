@@ -1,0 +1,17 @@
+package:
+  name: meggie_fooof
+  version: "0.1.0"
+
+source:
+  path: .
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+
+about:
+  license: BSD (3-clause)
+  summary: 'Meggie plugin providing interface to fooof package'

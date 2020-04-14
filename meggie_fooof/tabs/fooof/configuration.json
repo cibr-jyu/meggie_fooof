@@ -1,0 +1,9 @@
+{
+    "id": "fooof",
+    "name": "FOOOF",
+    "inputs": ["spectrum"],
+    "transforms": ["create_report"],
+    "outputs": ["fooof_report"],
+    "actions": ["plot", "save"],
+    "translations": {"create_report": "Create report"}
+}

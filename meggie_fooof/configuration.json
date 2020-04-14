@@ -1,0 +1,6 @@
+{
+    "name": "meggie_fooof",
+    "description": "Provides tab for FOOOF (fitting oscillations & one over f) package",
+    "tab_presets": [{"id": "fooof_analysis", "text": "FOOOF analysis",
+                     "tabs": ["preprocessing", "spectrums", "fooof"]}]
+}

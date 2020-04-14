@@ -1,0 +1,7 @@
+{
+    "id": "fooof_report",
+    "name": "Report",
+    "entry": "fooof_report.FOOOFReport",
+    "dir": "fooof_reports",
+    "save_key": "fooof_reports"
+}
