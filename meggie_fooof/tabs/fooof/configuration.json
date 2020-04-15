@@ -4,6 +4,10 @@
     "inputs": ["spectrum"],
     "transforms": ["create_report"],
     "outputs": ["fooof_report"],
-    "actions": ["plot", "save"],
-    "translations": {"create_report": "Create report"}
+    "actions": ["delete",
+                "delete_from_all"],
+    "translations": {"create_report": "Create report",
+                     "delete": "Delete report",
+                     "delete_from_all": "Delete report from all",
+                     "fooof_report": "FOOOF report"}
 }

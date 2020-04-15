@@ -7,13 +7,14 @@ import logging
 
 import numpy as np
 
+from fooof import FOOOFGroup
+
 from PyQt5 import QtWidgets
 
 from meggie_fooof.tabs.fooof.dialogs.createReportDialogUi import Ui_CreateReportDialog
+from meggie_fooof.datatypes.fooof_report.fooof_report import FOOOFReport
 
 from meggie.utilities.widgets.batchingWidgetMain import BatchingWidget
-
-from meggie_fooof.datatypes.fooof_report.fooof_report import FOOOFReport
 
 from meggie.utilities.decorators import threaded
 from meggie.utilities.validators import validate_name
@@ -53,12 +54,45 @@ class CreateReportDialog(QtWidgets.QDialog):
 
         report_name = validate_name(self.ui.lineEditName.text())
 
-        # report = ... selected_spectrum ...
-        from meggie.utilities.debug import debug_trace;
-        debug_trace()
+        spectrum = subject.spectrum.get(selected_spectrum)
+
+        if spectrum.log_transformed:
+            raise Exception('FOOOF needs spectrums in linear space (not log transformed)')
+
+        peak_width_limits = [0.5, 12.0]
+        min_peak_amplitude = 0
+        peak_threshold = 2
+        max_n_peaks = 4
+        background_mode = 'fixed'
+        freq_range = [1, 30]
+
+        report_content = {}
+
+        for key, data in spectrum.content.items():
+
+            fg = FOOOFGroup(peak_width_limits=peak_width_limits,
+			    min_peak_amplitude=min_peak_amplitude,
+			    peak_threshold=peak_threshold,
+			    max_n_peaks=max_n_peaks,
+                            background_mode=background_mode,
+			    verbose=False)
+
+     
+            fg.fit(spectrum.freqs, data, freq_range)
+            report_content[key] = fg
+
+        params = {
+            'conditions': list(spectrum.content.keys())
+        }
+
+        fooof_directory = subject.fooof_report_directory
+        report = FOOOFReport(report_name, 
+                             fooof_directory,
+                             params,
+                             report_content)
 
         report.save_content()
-        subject.add(report, 'report')
+        subject.add(report, 'fooof_report')
 
     def accept(self):
         subject = self.experiment.active_subject
