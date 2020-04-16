@@ -38,6 +38,13 @@ class CreateReportDialog(QtWidgets.QDialog):
 
         self.selected_spectrum = selected_spectrum
 
+        spectrum_item = experiment.active_subject.spectrum[selected_spectrum]
+        minfreq = spectrum_item.freqs[0]
+        maxfreq = spectrum_item.freqs[-1]
+
+        self.ui.doubleSpinBoxFreqMin.setValue(minfreq)
+        self.ui.doubleSpinBoxFreqMax.setValue(maxfreq)
+
         self.batching_widget = BatchingWidget(
             experiment_getter=self.experiment_getter,
             parent=self,
@@ -59,19 +66,28 @@ class CreateReportDialog(QtWidgets.QDialog):
         if spectrum.log_transformed:
             raise Exception('FOOOF needs spectrums in linear space (not log transformed)')
 
-        peak_width_limits = [0.5, 12.0]
-        min_peak_amplitude = 0
-        peak_threshold = 2
-        max_n_peaks = 4
-        background_mode = 'fixed'
-        freq_range = [1, 30]
+        from meggie.utilities.debug import debug_trace;
+        debug_trace()
+
+        peak_width_low = self.ui.doubleSpinBoxPeakWidthLow.value()
+        peak_width_high = self.ui.doubleSpinBoxPeakWidthHigh.value()
+        peak_threshold = self.ui.doubleSpinBoxPeakThreshold.value()
+        max_n_peaks = self.ui.spinBoxMaxNPeaks.value()
+        aperiodic_mode = self.ui.comboBoxAperiodicMode.currentText()
+        minfreq = self.ui.doubleSpinBoxFreqMin.value()
+        maxfreq = self.ui.doubleSpinBoxFreqMax.value()
+
+        peak_width_limits = [peak_width_low, peak_width_high]
+        peak_threshold = peak_threshold
+        max_n_peaks = max_n_peaks
+        background_mode = aperiodic_mode
+        freq_range = [minfreq, maxfreq]
 
         report_content = {}
 
         for key, data in spectrum.content.items():
 
             fg = FOOOFGroup(peak_width_limits=peak_width_limits,
-			    min_peak_amplitude=min_peak_amplitude,
 			    peak_threshold=peak_threshold,
 			    max_n_peaks=max_n_peaks,
                             background_mode=background_mode,
