@@ -66,9 +66,6 @@ class CreateReportDialog(QtWidgets.QDialog):
         if spectrum.log_transformed:
             raise Exception('FOOOF needs spectrums in linear space (not log transformed)')
 
-        from meggie.utilities.debug import debug_trace;
-        debug_trace()
-
         peak_width_low = self.ui.doubleSpinBoxPeakWidthLow.value()
         peak_width_high = self.ui.doubleSpinBoxPeakWidthHigh.value()
         peak_threshold = self.ui.doubleSpinBoxPeakThreshold.value()

@@ -4,6 +4,9 @@ import logging
 
 
 from meggie.utilities.names import next_available_name
+from meggie.utilities.messaging import messagebox
+
+from meggie_fooof.tabs.fooof.controller.fooof import plot_topo_fit
 
 from meggie_fooof.tabs.fooof.dialogs.createReportDialogMain import CreateReportDialog
 
@@ -11,20 +14,33 @@ from meggie_fooof.tabs.fooof.dialogs.createReportDialogMain import CreateReportD
 def create_report(experiment, data, window):
     """
     """
-    selected_names = data['inputs']['spectrum']
-
-    if not selected_names:
+    try:
+        selected_name = data['inputs']['spectrum'][0]
+    except Exception as exc:
         return
 
-    # take first
-    selected = selected_names[0]
-
     default_name = next_available_name(
-        experiment.active_subject.fooof_report.keys(), selected)
+        experiment.active_subject.fooof_report.keys(), 
+        selected_name)
 
-    dialog = CreateReportDialog(experiment, window, selected, default_name)
+    dialog = CreateReportDialog(experiment, window, selected_name, 
+                                default_name)
     dialog.show()
 
+
+def plot_topo(experiment, data, window):
+    """ Plot topography from report
+    """
+    subject = experiment.active_subject
+    
+    try:
+        selected_name = data['outputs']['fooof_report'][0]
+    except Exception as exc:
+        return
+
+    report_item = subject.fooof_report[selected_name]
+
+    plot_topo_fit(experiment, report_item)
 
 
 def delete(experiment, data, window):
