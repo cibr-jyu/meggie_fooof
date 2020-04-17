@@ -76,3 +76,21 @@ def delete_from_all(experiment, data, window):
     experiment.save_experiment_settings()
     window.initialize_ui()
 
+
+def fooof_info(experiment, data, window):
+    """
+    """
+    try:
+        selected_name = data['outputs']['fooof_report'][0]
+        fooof_item = experiment.active_subject.fooof_report[selected_name]
+        params = fooof_item.params
+
+        message = ""
+
+        if 'based_on' in params:
+            message += "Based on: {0}\n".format(params['based_on'])
+
+        return message
+    except Exception as exc:
+        return ""
+

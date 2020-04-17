@@ -63,9 +63,6 @@ class CreateReportDialog(QtWidgets.QDialog):
 
         spectrum = subject.spectrum.get(selected_spectrum)
 
-        if spectrum.log_transformed:
-            raise Exception('FOOOF needs spectrums in linear space (not log transformed)')
-
         peak_width_low = self.ui.doubleSpinBoxPeakWidthLow.value()
         peak_width_high = self.ui.doubleSpinBoxPeakWidthHigh.value()
         peak_threshold = self.ui.doubleSpinBoxPeakThreshold.value()
@@ -77,7 +74,7 @@ class CreateReportDialog(QtWidgets.QDialog):
         peak_width_limits = [peak_width_low, peak_width_high]
         peak_threshold = peak_threshold
         max_n_peaks = max_n_peaks
-        background_mode = aperiodic_mode
+        aperiodic_mode = aperiodic_mode
         freq_range = [minfreq, maxfreq]
 
         report_content = {}
@@ -87,15 +84,22 @@ class CreateReportDialog(QtWidgets.QDialog):
             fg = FOOOFGroup(peak_width_limits=peak_width_limits,
 			    peak_threshold=peak_threshold,
 			    max_n_peaks=max_n_peaks,
-                            background_mode=background_mode,
+                            aperiodic_mode=aperiodic_mode,
 			    verbose=False)
 
-     
-            fg.fit(spectrum.freqs, data, freq_range)
+            @threaded
+            def fit(**kwargs):
+                fg.fit(spectrum.freqs, data, freq_range)
+
+            fit(do_meanwhile=self.parent.update_ui)
+
+
             report_content[key] = fg
 
         params = {
-            'conditions': list(spectrum.content.keys())
+            'conditions': list(spectrum.content.keys()),
+            'based_on': selected_spectrum,
+            'ch_names': spectrum.ch_names,
         }
 
         fooof_directory = subject.fooof_report_directory

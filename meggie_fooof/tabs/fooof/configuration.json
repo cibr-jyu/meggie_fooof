@@ -4,6 +4,7 @@
     "inputs": ["spectrum"],
     "transforms": ["create_report"],
     "outputs": ["fooof_report"],
+    "info": ["fooof_info"],
     "actions": ["plot_topo",
                 "delete",
                 "delete_from_all"],
@@ -11,5 +12,6 @@
                      "plot_topo": "Plot topography from report",
                      "delete": "Delete report",
                      "delete_from_all": "Delete report from all",
-                     "fooof_report": "FOOOF report"}
+                     "fooof_report": "FOOOF report",
+                     "fooof_info": "FOOOF info"}
 }

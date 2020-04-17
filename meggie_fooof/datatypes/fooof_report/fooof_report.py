@@ -5,7 +5,7 @@ import os
 import re
 import logging
 
-from fooof.core.io import load_json
+from fooof import FOOOFGroup
 
 
 class FOOOFReport(object):
@@ -47,8 +47,9 @@ class FOOOFReport(object):
                 logging.getLogger('ui_logger').debug(
                         'Reading FOOOF file: ' + str(fname))
 
-                report = load_json(fname, self._path)
-                self._content[key] = report
+                fg = FOOOFGroup()
+                fg.load(fname, self._path)
+                self._content[key] = fg
         return self._content
 
     @property
