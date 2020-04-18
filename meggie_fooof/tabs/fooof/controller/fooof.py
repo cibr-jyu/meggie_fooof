@@ -10,8 +10,8 @@ from meggie.utilities.channels import iterate_topography
 
 
 def plot_topo_fit(experiment, report_item):
-    """
-    """ 
+    """ Plot topography where by clicking subplots you can check the fit parameters
+    of specific channels """
 
     subject = experiment.active_subject
 
@@ -27,7 +27,27 @@ def plot_topo_fit(experiment, report_item):
     def on_pick(ax, info_idx, names_idx):
         """
         """
-        logging.getLogger(str(ch_names[names_idx]) + ' picked')
+        fig = ax.figure
+        fig.delaxes(ax)
+
+        for idx, (report_key, report) in enumerate(reports.items()):
+            report_ax = fig.add_subplot(1, len(reports), idx+1)
+            fooof = report.get_fooof(names_idx)
+
+            fooof.plot(
+                ax=report_ax,
+                plot_peaks='dot',
+                add_legend=False,
+            )
+            text = ("Condition: " + str(report_key) + "\n" +
+                    "R squred: " + '{0:.2f}'.format(fooof.r_squared_) + "\n" +
+                    "Peaks: \n")
+            for peak_params in fooof.peak_params_:
+                text = text + '{0:.2f} ({1:.2f}, {2:.2f})\n'.format(*peak_params)
+
+            report_ax.set_title(text)
+
+        fig.tight_layout()
 
     fig = plt.figure()
     for ax, info_idx, names_idx in iterate_topography(
