@@ -1,18 +1,19 @@
-"""
-"""
-import logging
+# coding: utf-8
 
+import logging
 
 from meggie.utilities.names import next_available_name
 from meggie.utilities.messaging import messagebox
+from meggie.utilities.messaging import exc_messagebox
 
 from meggie_fooof.tabs.fooof.controller.fooof import plot_topo_fit
+from meggie_fooof.tabs.fooof.controller.fooof import save_all_channels
 
 from meggie_fooof.tabs.fooof.dialogs.createReportDialogMain import CreateReportDialog
 
 
 def create_report(experiment, data, window):
-    """
+    """ Opens dialog that can be used to create FOOOF reports
     """
     try:
         selected_name = data['inputs']['spectrum'][0]
@@ -29,7 +30,7 @@ def create_report(experiment, data, window):
 
 
 def plot_topo(experiment, data, window):
-    """ Plot topography from report
+    """ Plot topography from report, than can be used to inspect fits
     """
     subject = experiment.active_subject
     
@@ -40,7 +41,25 @@ def plot_topo(experiment, data, window):
 
     report_item = subject.fooof_report[selected_name]
 
-    plot_topo_fit(experiment, report_item)
+    try:
+        plot_topo_fit(experiment, report_item)
+    except Exception as exc:
+        exc_messagebox(window, exc)
+
+
+def save(experiment, data, window):
+    """ Save periodic and aperiodic params from all channels and 
+    subjects to csv """
+
+    try:
+        selected_name = data['outputs']['fooof_report'][0]
+    except IndexError as exc:
+        return
+
+    try:
+        save_all_channels(experiment, selected_name)
+    except Exception as exc:
+        exc_messagebox(window, exc)
 
 
 def delete(experiment, data, window):
@@ -53,6 +72,7 @@ def delete(experiment, data, window):
         return
 
     subject.remove(selected_name, 'fooof_report')
+
     experiment.save_experiment_settings()
     window.initialize_ui()
 
@@ -73,12 +93,13 @@ def delete_from_all(experiment, data, window):
                 logging.getLogger('ui_logger').warning(
                     'Could not remove FOOOF report for ' +
                     subject.name)
+
     experiment.save_experiment_settings()
     window.initialize_ui()
 
 
 def fooof_info(experiment, data, window):
-    """
+    """ Fills info element on the FOOOF tab
     """
     try:
         selected_name = data['outputs']['fooof_report'][0]
