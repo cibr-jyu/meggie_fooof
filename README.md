@@ -4,12 +4,7 @@ meggie\_fooof is a plugin for meggie that provides basic interface to FOOOF func
 
 ## Installation
 
-Given that meggie is installed to the system already, you can install meggie\_fooof either via
-
-1. Install requirements: pip install fooof
-2. Install plugin: python setup.py install
-
-or in one step with conda:
+Given that meggie is installed to "meggie-env" environment already, you can install meggie\_fooof with
 
 1. conda install -c CIBR -n meggie-env meggie\_fooof
 

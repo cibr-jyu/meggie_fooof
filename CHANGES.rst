@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.1.0 (unreleased)
+0.1.0 (2020-04-20)
 -----------------
 
-- nothing changed yet.
+- Initial release with datatype and tab implemented.
