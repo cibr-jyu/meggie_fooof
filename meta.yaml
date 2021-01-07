@@ -1,6 +1,6 @@
 package:
   name: meggie_fooof
-  version: "0.1.0"
+  version: "0.1.1"
 
 source:
   path: .
@@ -11,7 +11,8 @@ requirements:
     - setuptools
   run:
     - python
-    - fooof>=1.0.0rc3
+    - meggie>=1.0.0
+    - fooof>=1.0.0
 
 about:
   license: BSD (3-clause)

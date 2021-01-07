@@ -16,7 +16,6 @@ class FOOOFReport(object):
         """
         """
         self._name = name
-
         self._content = {}
 
         # on item creation, content is passed and is set here
@@ -43,9 +42,10 @@ class FOOOFReport(object):
                 except Exception as exc:
                     raise Exception("Unknown file name format.")
 
-                if key not in [str(elem) for elem 
-                               in self._params['conditions']]:
-                    continue
+                if 'conditions' in self._params:
+                    if key not in [str(elem) for elem 
+                                   in self._params['conditions']]:
+                        continue
 
                 logging.getLogger('ui_logger').debug(
                         'Reading FOOOF file: ' + str(fname))
@@ -98,9 +98,11 @@ class FOOOFReport(object):
                 except Exception as exc:
                     continue
 
-                if key not in [str(elem) for elem 
-                               in self._params['conditions']]:
-                    continue
+                if 'conditions' in self._params:
+                    if key not in [str(elem) for elem 
+                                   in self._params['conditions']]:
+                        continue
+
                 logging.getLogger('ui_logger').debug(
                         'Removing existing fooof file: ' + str(fname))
 

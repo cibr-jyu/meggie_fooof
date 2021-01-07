@@ -1,9 +1,6 @@
-# coding: utf-8
-
 import logging
 
 from meggie.utilities.names import next_available_name
-from meggie.utilities.messaging import messagebox
 from meggie.utilities.messaging import exc_messagebox
 
 from meggie_fooof.tabs.fooof.controller.fooof import plot_topo_fit
@@ -44,6 +41,7 @@ def plot_topo(experiment, data, window):
     try:
         plot_topo_fit(experiment, report_item)
     except Exception as exc:
+        logging.getLogger('ui_logger').exception(str(exc))
         exc_messagebox(window, exc)
 
 
@@ -59,6 +57,7 @@ def save(experiment, data, window):
     try:
         save_all_channels(experiment, selected_name)
     except Exception as exc:
+        logging.getLogger('ui_logger').exception(str(exc))
         exc_messagebox(window, exc)
 
 
@@ -71,9 +70,16 @@ def delete(experiment, data, window):
     except IndexError as exc:
         return
 
-    subject.remove(selected_name, 'fooof_report')
+    try:
+        subject.remove(selected_name, 'fooof_report')
+    except Exception as exc:
+        logging.getLogger('ui_logger').exception(str(exc))
+        exc_messagebox(window, exc)
 
     experiment.save_experiment_settings()
+
+    logging.getLogger('ui_logger').info('Deleted selected FOOOF item')
+
     window.initialize_ui()
 
 
@@ -90,11 +96,15 @@ def delete_from_all(experiment, data, window):
             try:
                 subject.remove(selected_name, "fooof_report")
             except Exception as exc:
+                logging.getLogger('ui_logger').exception(str(exc))
                 logging.getLogger('ui_logger').warning(
                     'Could not remove FOOOF report for ' +
                     subject.name)
 
     experiment.save_experiment_settings()
+
+    logging.getLogger('ui_logger').info('Deleted selected FOOOF item from all subjects.')
+
     window.initialize_ui()
 
 

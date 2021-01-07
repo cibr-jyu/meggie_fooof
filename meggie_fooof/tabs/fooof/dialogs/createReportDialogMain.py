@@ -94,6 +94,7 @@ class CreateReportDialog(QtWidgets.QDialog):
                 """ Run fitting in a separate thread so that UI stays responsive
                 """
                 fg.fit(spectrum.freqs, data, freq_range)
+
             fit(do_meanwhile=self.parent.update_ui)
 
             logging.getLogger('ui_logger').info('FOOOF results for ' +
@@ -136,13 +137,14 @@ class CreateReportDialog(QtWidgets.QDialog):
             self.create_report(subject, selected_spectrum)
         except Exception as exc:
             exc_messagebox(self, exc)
+            logging.getLogger('ui_logger').exception(str(exc))
             return
 
         # Update experiment file and the window
         self.experiment.save_experiment_settings()
         self.parent.initialize_ui()
 
-        logging.getLogger('ui_logger').info('Finished.')
+        logging.getLogger('ui_logger').info('Finished creating FOOOF report.')
         self.close()
 
 
@@ -168,9 +170,11 @@ class CreateReportDialog(QtWidgets.QDialog):
 
         # if any fails, tell user about them
         self.batching_widget.cleanup()
+
         # and update experiment file and the UI
         self.experiment.save_experiment_settings()
         self.parent.initialize_ui()
 
-        logging.getLogger('ui_logger').info('Finished.')
+        logging.getLogger('ui_logger').info('Finished creating FOOOF report.')
+
         self.close()

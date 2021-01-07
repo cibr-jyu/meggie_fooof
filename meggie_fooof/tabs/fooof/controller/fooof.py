@@ -9,7 +9,7 @@ from meggie.utilities.filemanager import create_timestamped_folder
 from meggie.utilities.filemanager import save_csv
 from meggie.utilities.formats import format_float
 from meggie.utilities.formats import format_floats
-from meggie.utilities.colors import color_cycle
+from meggie.utilities.plotting import color_cycle
 from meggie.utilities.channels import iterate_topography
 
 
@@ -70,9 +70,8 @@ def plot_topo_fit(experiment, report_item):
                         linewidth=0.5, label=key)[0])
 
     fig.legend(handles=handles)
-    title = 'report_{0}'.format(report_item.name)
-    fig.canvas.set_window_title(title)
-    fig.suptitle(title)
+    fig.canvas.set_window_title(report_item.name)
+    fig.suptitle(report_item.name)
 
     plt.show()
 
