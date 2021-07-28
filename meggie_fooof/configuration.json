@@ -1,6 +1,23 @@
 {
-    "name": "meggie_fooof",
-    "description": "Provides tab for FOOOF (fitting oscillations & one over f) package",
-    "tab_presets": [{"id": "fooof_analysis", "text": "FOOOF analysis",
-                     "tabs": ["preprocessing", "spectrums", "fooof"]}]
+    "id": "meggie_fooof",
+    "name": "Provides functios for FOOOF analysis",
+    "author": "CIBR",
+    "tabs": [
+        {"id": "fooof",
+         "name": "FOOOF",
+         "inputs": ["spectrum"],
+         "outputs": ["fooof_report"],
+         "input_actions": ["fooof_create"],
+         "output_actions": ["fooof_plot",
+                            "fooof_save",
+                            "fooof_delete",
+                            "fooof_delete_from_all"],
+         "info": ["fooof_info"]}
+    ],
+    "pipelines": [
+        {"id": "fooof_sensor",
+         "name": "Sensor-level FOOOF analysis",
+         "include_tabs": ["preprocessing", "spectrum", "fooof"]
+        }
+    ]
 }

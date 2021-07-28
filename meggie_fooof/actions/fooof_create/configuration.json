@@ -1,0 +1,5 @@
+{
+    "id": "fooof_create",
+    "name": "Create FOOOF report",
+    "entry": "CreateFooof"
+}
