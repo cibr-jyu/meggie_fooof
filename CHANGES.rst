@@ -1,10 +1,15 @@
 Changelog
 =========
 
-0.1.2 (unreleased)
+0.2.1 (unreleased)
 -----------------
 
 - nothing changed yet
+
+0.2.0 (2021-08-16)
+-----------------
+
+- Fix dependency to Meggie>=1.2.0
 
 0.1.1 (2021-01-07)
 -----------------

@@ -3,7 +3,6 @@
 import os 
 
 from meggie.utilities.names import next_available_name
-from meggie.utilities.decorators import threaded
 
 from meggie.utilities.messaging import exc_messagebox
 
@@ -15,6 +14,8 @@ from meggie_fooof.actions.fooof_create.controller.fooof import create_report
 
 
 class CreateFooof(Action):
+    """ Creates FOOOF from existing spectrum.
+    """
 
     def run(self):
 

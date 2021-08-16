@@ -9,7 +9,7 @@ from meggie.mainwindow.dynamic import subject_action
 
 
 class DeleteFooofFromAll(Action):
-    """
+    """ Delete a FOOOF item from all subjects.
     """
 
     def run(self):
@@ -29,7 +29,11 @@ class DeleteFooofFromAll(Action):
                         'Could not remove FOOOF report for ' +
                         subject.name)
 
-        self.experiment.save_experiment_settings()
+        try:
+            self.experiment.save_experiment_settings()
+        except Exception as exc:
+            exc_messagebox(self.window, exc)
+
         self.window.initialize_ui()
 
     @subject_action

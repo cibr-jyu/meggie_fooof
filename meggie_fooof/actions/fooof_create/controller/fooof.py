@@ -1,4 +1,5 @@
-# coding: utf-8
+""" Contains functions for handling FOOOFs
+"""
 
 import logging
 
@@ -7,13 +8,13 @@ from PyQt5 import QtWidgets
 from fooof import FOOOFGroup
 from fooof.core.strings import gen_results_fg_str
 
-from meggie_fooof.tabs.fooof.dialogs.createReportDialogUi import Ui_CreateReportDialog
+from meggie_fooof.actions.fooof_create.dialogs.createReportDialogUi import Ui_CreateReportDialog
 
 from meggie_fooof.datatypes.fooof_report.fooof_report import FOOOFReport
 
 from meggie.utilities.widgets.batchingWidgetMain import BatchingWidget
 
-from meggie.utilities.decorators import threaded
+from meggie.utilities.threading import threaded
 from meggie.utilities.validators import validate_name
 from meggie.utilities.messaging import exc_messagebox
 from meggie.utilities.messaging import messagebox

@@ -14,7 +14,7 @@ from meggie_fooof.actions.fooof_plot.controller.fooof import plot_topo_fit
 
 
 class PlotFooof(Action):
-    """
+    """ Plots a FOOOF topography
     """
 
     def run(self):

@@ -14,7 +14,7 @@ from meggie_fooof.actions.fooof_save.controller.fooof import save_all_channels
 
 
 class SaveFooof(Action):
-    """
+    """ Saves FOOOF to a csv.
     """
 
     def run(self):
@@ -25,6 +25,7 @@ class SaveFooof(Action):
             return
 
         subject = self.experiment.active_subject
+
         try:
             self.handler(subject, {'name': selected_name})
         except Exception as exc:

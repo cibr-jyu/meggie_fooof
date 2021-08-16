@@ -13,7 +13,7 @@ from meggie_fooof.datatypes.fooof_report.fooof_report import FOOOFReport
 
 from meggie.utilities.widgets.batchingWidgetMain import BatchingWidget
 
-from meggie.utilities.decorators import threaded
+from meggie.utilities.threading import threaded
 from meggie.utilities.validators import validate_name
 from meggie.utilities.messaging import exc_messagebox
 from meggie.utilities.messaging import messagebox
@@ -150,12 +150,12 @@ class CreateReportDialog(QtWidgets.QDialog):
 
         try:
             self.handler(subject, params)
+            self.experiment.save_experiment_settings()
         except Exception as exc:
             exc_messagebox(self, exc)
             return
 
         # Update experiment file and the window
-        self.experiment.save_experiment_settings()
         self.parent.initialize_ui()
 
         self.close()
@@ -199,7 +199,11 @@ class CreateReportDialog(QtWidgets.QDialog):
         self.batching_widget.cleanup()
 
         # and update experiment file and the UI
-        self.experiment.save_experiment_settings()
+        try:
+            self.experiment.save_experiment_settings()
+        except Exception as exc:
+            exc_messagebox(self.parent, exc)
+
         self.parent.initialize_ui()
 
         self.close()
