@@ -6,10 +6,10 @@ Changelog
 
 - nothing changed yet
 
-0.2.0 (2021-08-16)
+0.2.0 (2021-08-20)
 -----------------
 
-- Fix dependency to Meggie>=1.2.0
+- Fix dependency to Meggie>=1.3.0
 
 0.1.1 (2021-01-07)
 -----------------

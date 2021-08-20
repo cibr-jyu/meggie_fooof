@@ -13,6 +13,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'meggie>=1.2.0'
+        'meggie>=1.3.0',
+        'fooof'
     ]
 )

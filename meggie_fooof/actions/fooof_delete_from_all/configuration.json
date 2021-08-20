@@ -1,5 +1,5 @@
 {
     "id": "fooof_delete_from_all",
-    "name": "Delete FOOOF from all",
+    "name": "Delete from all",
     "entry": "DeleteFooofFromAll"
 }
