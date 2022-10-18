@@ -1,10 +1,16 @@
 Changelog
 =========
 
-0.2.1 (unreleased)
+0.2.2 (unreleased)
 -----------------
 
 - nothing changed yet
+
+0.2.1 (2022-10-18)
+-----------------
+
+- matplotlib deprecated fig.canvas.set_window_title
+
 
 0.2.0 (2021-08-20)
 -----------------

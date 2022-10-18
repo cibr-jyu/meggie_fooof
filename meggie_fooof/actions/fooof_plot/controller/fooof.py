@@ -63,7 +63,7 @@ def plot_topo_fit(subject, report_item):
                         linewidth=0.5, label=key)[0])
 
     fig.legend(handles=handles)
-    fig.canvas.set_window_title(report_item.name)
+    fig.canvas.manager.set_window_title(report_item.name)
     fig.suptitle(report_item.name)
 
     plt.show()
