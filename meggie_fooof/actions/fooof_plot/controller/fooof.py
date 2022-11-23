@@ -41,7 +41,7 @@ def plot_topo_fit(subject, report_item):
             )
             # Add information about the fit to the axis title
             text = ("Condition: " + str(report_key) + "\n" +
-                    "R squred: " + format_float(fooof.r_squared_) + "\n" +
+                    "R squared: " + format_float(fooof.r_squared_) + "\n" +
                     "Peaks: \n")
             for peak_params in fooof.peak_params_:
                 text = text + '{0} ({1}, {2})\n'.format(*format_floats(peak_params))

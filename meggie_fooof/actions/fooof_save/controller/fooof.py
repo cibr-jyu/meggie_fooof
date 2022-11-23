@@ -17,7 +17,10 @@ def save_all_channels(experiment, selected_name):
     csv_data = []
 
     column_names = ['CF', 'Amp', 'BW', 
-                    'Aperiodic offset', 'Aperiodic exponent']
+                    'Aperiodic offset',
+                    'Aperiodic exponent'
+                    'R squared',
+                    'Mean Absolute Error']
 
     for subject in experiment.subjects.values():
         fooof_item = subject.fooof_report.get(selected_name)
@@ -27,15 +30,28 @@ def save_all_channels(experiment, selected_name):
             for ch_idx, ch_name in enumerate(fooof_item.params['ch_names']):
                 ch_report = report.get_fooof(ch_idx)
                 for peak in ch_report.peak_params_:
-                    csv_data.append([format_float(peak[0]),
-                                     format_float(peak[1]),
-                                     format_float(peak[2]), 
-                                     '', ''])
+                    csv_data.append([
+                        format_float(peak[0]),
+                        format_float(peak[1]),
+                        format_float(peak[2]),
+                        '',
+                        '',
+                        '',
+                        ''
+                    ])
                     row_descs.append((subject.name, key, ch_name))
                 aparams = ch_report.aperiodic_params_
-                csv_data.append(['', '', '',
-                                 format_float(aparams[0]),
-                                 format_float(aparams[1])])
+                rsquared = ch_report.r_squared_
+                mae = ch_report.error_
+                csv_data.append([
+                    '',
+                    '',
+                    '',
+                    format_float(aparams[0]),
+                    format_float(aparams[1]),
+                    format_float(rsquared),
+                    format_float(mae),
+                ])
 
                 row_descs.append((subject.name, key, ch_name))
 
