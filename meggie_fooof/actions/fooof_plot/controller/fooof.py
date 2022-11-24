@@ -10,11 +10,79 @@ from meggie.utilities.plotting import set_figure_title
 from meggie.utilities.channels import average_to_channel_groups
 from meggie.utilities.channels import filter_info
 from meggie.utilities.channels import iterate_topography
+from meggie.utilities.channels import get_channels_by_type
+
+from fooof.objs.utils import average_fg
+
+from fooof.bands import Bands
 
 
-def plot_fit_averages(subject, channel_groups, name):
+def plot_fit_averages(subject, channel_groups, name, bands):
     """
     """
+    report_item = subject.fooof_report[name]
+    reports = report_item.content
+    ch_names = report_item.params['ch_names']
+    freqs = list(reports.values())[0].freqs
+
+    raw = subject.get_raw()
+    info = raw.info
+
+    colors = color_cycle(len(reports))
+
+    conditions = report_item.params['conditions']
+    channels_by_type = get_channels_by_type(info)
+
+    if not bands:
+        bands = [
+            [0, 4],
+            [4, 7],
+            [7,14],
+            [14, 30],
+            [30, 100]
+        ]
+    bands = dict([('band {0}'.format(band_idx+1), band)
+                  for band_idx, band in enumerate(bands)])
+    fooof_bands = Bands(bands)
+
+    averages = {}
+    for key, fg in sorted(reports.items()):
+        for ch_type in ['eeg', 'mag', 'grad']:
+
+            # carry on only if data contains this chtype
+            if ch_type not in channels_by_type:
+                continue
+
+            # select a set of channel groups that contains
+            # the channels of type of interest
+            if ch_type in ['grad', 'mag']:
+                ch_groups = channel_groups['meg']
+            else:
+                ch_groups = channel_groups['eeg']
+
+            for ch_group_key, ch_group in ch_groups.items():
+
+                # filter channel group to specific type,
+                # that is, get for example mags from all meg channels
+                ch_type_group = [ch_name for ch_name in ch_group
+                                 if ch_name in channels_by_type.get(ch_type)]
+
+                label = (ch_type, ch_group_key)
+
+                idxs = [ch_idx for ch_idx, ch_name in enumerate(ch_names)
+                        if ch_name in ch_type_group]
+
+                sub_fg = fg.get_group(idxs)
+                avg_fg = average_fg(sub_fg, fooof_bands, avg_method='mean')
+
+                if label not in averages:
+                    averages[label] = []
+
+                averages[label].append((key, avg_fg))
+
+    from meggie.utilities.debug import debug_trace;
+    debug_trace()
+    print("And then plot..")
 
 
 def plot_fit_topo(subject, name, ch_type):

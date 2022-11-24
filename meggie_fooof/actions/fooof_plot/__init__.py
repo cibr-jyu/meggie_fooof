@@ -25,10 +25,20 @@ class PlotFooof(Action):
         except IndexError as exc:
             return
 
+        config = self.window.prefs.read_config()
+        try:
+            def to_tuple(val):
+                return [float(x) for x in val.strip('[').strip(']').split('-')]
+            band_entry = config.get('meggie_fooof', 'bands')
+            bands = [to_tuple(val) for val in band_entry.split(',')]
+        except Exception as exc:
+            bands = None
+
         def option_handler(selected_option):
             params = {'name': selected_name,
                       'output_option': selected_option,
-                      'channel_groups': self.experiment.channel_groups}
+                      'channel_groups': self.experiment.channel_groups,
+                      'bands': bands}
             try:
                 self.handler(self.experiment.active_subject, params)
             except Exception as exc:
@@ -41,7 +51,7 @@ class PlotFooof(Action):
     @subject_action
     def handler(self, subject, params):
         if params['output_option'] == 'channel_averages':
-            plot_fit_averages(subject, params['channel_groups'], params['name'])
+            plot_fit_averages(subject, params['channel_groups'], params['name'], params['bands'])
         else:
             info = subject.get_raw().info
             chs = list(get_channels_by_type(info).keys())

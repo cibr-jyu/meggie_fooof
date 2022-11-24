@@ -1,6 +1,6 @@
 {
     "id": "meggie_fooof",
-    "name": "Provides functios for FOOOF analysis",
+    "name": "Provides functions for FOOOF analysis",
     "author": "CIBR",
     "tabs": [
         {"id": "fooof",
