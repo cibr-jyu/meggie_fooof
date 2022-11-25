@@ -1,10 +1,18 @@
 Changelog
 =========
 
-0.2.2 (unreleased)
+0.3.1 (unreleased)
 -----------------
 
 - nothing changed yet
+
+
+0.3.0 (2022-11-25)
+-----------------
+
+- Add channel average plots
+- Add channel average save csv
+- Add goodness-of-fit information to save csv
 
 0.2.1 (2022-10-18)
 -----------------
