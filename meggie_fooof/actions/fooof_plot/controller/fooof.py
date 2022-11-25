@@ -45,16 +45,15 @@ def plot_fit_averages(subject, channel_groups, name, bands):
                   for band_idx, band in enumerate(bands)])
     fooof_bands = Bands(bands)
 
+    # create channel averages using
+    # fooof's own averaging function
     averages = {}
     for key, fg in sorted(reports.items()):
         for ch_type in ['eeg', 'mag', 'grad']:
 
-            # carry on only if data contains this chtype
             if ch_type not in channels_by_type:
                 continue
 
-            # select a set of channel groups that contains
-            # the channels of type of interest
             if ch_type in ['grad', 'mag']:
                 ch_groups = channel_groups['meg']
             else:
@@ -62,8 +61,6 @@ def plot_fit_averages(subject, channel_groups, name, bands):
 
             for ch_group_key, ch_group in ch_groups.items():
 
-                # filter channel group to specific type,
-                # that is, get for example mags from all meg channels
                 ch_type_group = [ch_name for ch_name in ch_group
                                  if ch_name in channels_by_type.get(ch_type)]
 
@@ -80,9 +77,45 @@ def plot_fit_averages(subject, channel_groups, name, bands):
 
                 averages[label].append((key, avg_fg))
 
-    from meggie.utilities.debug import debug_trace;
-    debug_trace()
-    print("And then plot..")
+
+    # plot averages
+    # ..for each channel type
+    ch_types = sorted(set([label[0] for label in averages.keys()]))
+    for ch_type in ch_types:
+
+        # ..and for each channel group
+        ch_groups = sorted([label[1] for label in averages.keys()
+                            if label[0] == ch_type])
+        for ch_group in ch_groups:
+
+            # ..in a separate figure
+            fig = plt.figure()
+
+            for idx, (fooof_key, fooof) in enumerate(averages[(ch_type, ch_group)]):
+                fooof_ax = fig.add_subplot(1, len(averages[(ch_type, ch_group)]), idx+1)
+
+                # Use plot function from fooof
+                fooof.plot(
+                    ax=fooof_ax,
+                    plot_peaks='dot',
+                    add_legend=False,
+                )
+                # Add information about the fit to the axis title
+                text = ("Condition: " + str(fooof_key) + "\n" +
+                        "R squared: " + format_float(fooof.r_squared_) + "\n" +
+                        "Peaks: \n")
+                for peak_params in fooof.peak_params_:
+                    text = text + '{0} ({1}, {2})\n'.format(*format_floats(peak_params))
+
+                fooof_ax.set_title(text)
+
+            title = '{0} {1} {2}'.format(report_item.name, ch_type, ch_group)
+            fig.suptitle(title)
+            set_figure_title(fig, title.replace(' ', '_'))
+
+            fig.tight_layout()
+
+    plt.show()
 
 
 def plot_fit_topo(subject, name, ch_type):
