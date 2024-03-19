@@ -1,5 +1,6 @@
 {
     "id": "fooof_save",
     "name": "Save to csv",
-    "entry": "SaveFooof"
+    "entry": "SaveFooof",
+    "description": "Export the numerical data from the FOOOF object for all matching subjects into a CSV file."
 }

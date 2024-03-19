@@ -1,6 +1,7 @@
 {
     "id": "meggie_fooof",
-    "name": "Provides functions for FOOOF analysis",
+    "name": "FOOOF",
+    "description": "Enable spectral parameterization with the FOOOF package.",
     "author": "CIBR",
     "tabs": [
         {"id": "fooof",

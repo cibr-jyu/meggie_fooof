@@ -1,5 +1,6 @@
 {
     "id": "fooof_delete",
     "name": "Delete",
-    "entry": "DeleteFooof"
+    "entry": "DeleteFooof",
+    "description": "Permanently remove the selected FOOOF object from the current subject."
 }

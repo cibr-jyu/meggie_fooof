@@ -1,5 +1,6 @@
 {
     "id": "fooof_plot",
     "name": "Plot",
-    "entry": "PlotFooof"
+    "entry": "PlotFooof",
+    "description": "Generate a plot for the selected FOOOF object. The FOOOF object may be visualized for all channels individually or as an average across specified channel groups."
 }

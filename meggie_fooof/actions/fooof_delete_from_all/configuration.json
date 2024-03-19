@@ -1,5 +1,6 @@
 {
     "id": "fooof_delete_from_all",
     "name": "Delete from all",
-    "entry": "DeleteFooofFromAll"
+    "entry": "DeleteFooofFromAll",
+    "description": "Permanently remove the selected FOOOF object from all matching subjects."
 }
