@@ -1,10 +1,17 @@
 Changelog
 =========
 
-0.3.1 (unreleased)
+0.3.2 (unreleased)
 -----------------
 
 - nothing changed yet
+
+0.3.1 (2024-03-19)
+-----------------
+
+- Add tests
+- Add github workflow
+- Update plugin and action metadata
 
 
 0.3.0 (2022-11-25)

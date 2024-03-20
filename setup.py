@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='meggie_fooof',
-    version='0.3.0',
+    version='0.3.1',
     description="",
     author='CIBR',
     author_email='erkka.heinila@jyu.fi',
@@ -14,6 +14,6 @@ setup(
     install_requires=[
         'setuptools',
         'meggie>=1.4.1',
-        'fooof'
+        'fooof>=1.0.0'
     ]
 )

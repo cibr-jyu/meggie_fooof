@@ -1,5 +1,6 @@
 {
     "id": "fooof_create",
     "name": "Create FOOOF report",
-    "entry": "CreateFooof"
+    "entry": "CreateFooof",
+    "description": "Generate a spectral parameterization object for the selected spectrum object."
 }
