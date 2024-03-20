@@ -48,7 +48,11 @@ def create_fooof_experiment(experiment_folder, experiment_name, n_subjects=2):
             )
             fg.fit(spectrum.freqs, data, freq_range)
             report_content[key] = fg
-        params = {"spectrum_name": spectrum_name}
+
+        params = {}
+        params["spectrum_name"] = spectrum_name
+        params["conditions"] = list(spectrum.content.keys())
+        params["ch_names"] = spectrum.ch_names
         fooof_directory = subject.fooof_report_directory
         report = FOOOFReport(report_name, fooof_directory, params, report_content)
         subject.add(report, "fooof_report")
