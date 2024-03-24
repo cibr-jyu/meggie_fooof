@@ -6,7 +6,7 @@ setup(
     description="",
     author='CIBR',
     author_email='erkka.heinila@jyu.fi',
-    url='https://github.com/Teekuningas/meggie_fooof',
+    url='https://github.com/cibr-jyu/meggie_fooof',
     license='BSD',
     packages=['meggie_fooof'],
     include_package_data=True,
