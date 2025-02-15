@@ -1,5 +1,4 @@
-""" Contains implementation for fooof plot
-"""
+"""Contains implementation for fooof plot"""
 
 from meggie.utilities.messaging import exc_messagebox
 from meggie.utilities.channels import get_channels_by_type

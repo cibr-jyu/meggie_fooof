@@ -1,5 +1,4 @@
-""" Contains implementation for fooof info
-"""
+"""Contains implementation for fooof info"""
 
 from meggie.mainwindow.dynamic import InfoAction
 

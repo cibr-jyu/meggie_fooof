@@ -1,5 +1,4 @@
-""" Contains implementation for delete fooof from all
-"""
+"""Contains implementation for delete fooof from all"""
 
 import logging
 

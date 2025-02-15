@@ -1,5 +1,4 @@
-""" Contains create fooof action handling.
-"""
+"""Contains create fooof action handling."""
 
 from meggie.utilities.names import next_available_name
 

@@ -1,5 +1,4 @@
-""" Contains functions for handling FOOOFs
-"""
+"""Contains functions for handling FOOOFs"""
 
 import logging
 

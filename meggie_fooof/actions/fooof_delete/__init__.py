@@ -1,5 +1,4 @@
-""" Contains implementation for delete fooof
-"""
+"""Contains implementation for delete fooof"""
 
 from meggie.utilities.messaging import exc_messagebox
 

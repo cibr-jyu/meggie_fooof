@@ -17,7 +17,7 @@
     ],
     "pipelines": [
         {"id": "fooof_sensor",
-         "name": "Sensor-level FOOOF analysis",
+         "name": "FOOOF analysis",
          "include_tabs": ["preprocessing", "spectrum", "fooof"]
         }
     ]

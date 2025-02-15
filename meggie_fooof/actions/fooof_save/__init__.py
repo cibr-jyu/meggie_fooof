@@ -1,5 +1,4 @@
-""" Contains implementation for fooof save
-"""
+"""Contains implementation for fooof save"""
 
 from meggie.utilities.messaging import exc_messagebox
 
