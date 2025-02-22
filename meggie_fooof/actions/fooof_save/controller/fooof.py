@@ -1,9 +1,7 @@
 # coding: utf-8
 
 import logging
-import os
 
-from meggie.utilities.filemanager import create_timestamped_folder
 from meggie.utilities.filemanager import save_csv
 from meggie.utilities.channels import get_channels_by_type
 from meggie.utilities.formats import format_float
@@ -26,7 +24,7 @@ COLUMN_NAMES = [
 
 
 @threaded
-def save_all_channels(experiment, selected_name):
+def save_all_channels(experiment, selected_name, path):
     """Saves peak params and aperiodic params to a csv file for every
     subject and channel and condition"""
     row_descs = []
@@ -69,17 +67,12 @@ def save_all_channels(experiment, selected_name):
 
                 row_descs.append((subject.name, key, ch_name))
 
-    # Save the resulting csv into a output folder 'meggie way'
-    folder = create_timestamped_folder(experiment)
-    fname = selected_name + "_all_subjects_all_channels_fooof.csv"
-    path = os.path.join(folder, fname)
-
     save_csv(path, csv_data, COLUMN_NAMES, row_descs)
     logging.getLogger("ui_logger").info("Saved the csv file to " + path)
 
 
 @threaded
-def save_channel_averages(experiment, selected_name, channel_groups, bands):
+def save_channel_averages(experiment, selected_name, channel_groups, bands, path):
     """ """
     row_descs = []
     csv_data = []
@@ -164,11 +157,6 @@ def save_channel_averages(experiment, selected_name, channel_groups, bands):
                     )
 
                     row_descs.append((subject.name, key, ch_type, ch_group_key))
-
-    # Save the resulting csv into a output folder 'meggie way'
-    folder = create_timestamped_folder(experiment)
-    fname = selected_name + "_all_subjects_channel_averages_fooof.csv"
-    path = os.path.join(folder, fname)
 
     save_csv(path, csv_data, COLUMN_NAMES, row_descs)
     logging.getLogger("ui_logger").info("Saved the csv file to " + path)
