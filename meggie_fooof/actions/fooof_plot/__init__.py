@@ -4,7 +4,6 @@ from meggie.utilities.messaging import exc_messagebox
 from meggie.utilities.channels import get_channels_by_type
 
 from meggie.mainwindow.dynamic import Action
-from meggie.mainwindow.dynamic import subject_action
 
 from meggie_fooof.actions.fooof_plot.controller.fooof import plot_fit_topo
 from meggie_fooof.actions.fooof_plot.controller.fooof import plot_fit_averages
@@ -48,7 +47,6 @@ class PlotFooof(Action):
         dialog = OutputOptions(self.window, handler=option_handler)
         dialog.show()
 
-    @subject_action
     def handler(self, subject, params):
         if params["output_option"] == "channel_averages":
             plot_fit_averages(
