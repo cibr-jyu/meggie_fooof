@@ -14,7 +14,7 @@ from meggie.utilities.dialogs.outputOptionsMain import OutputOptions
 class PlotFooof(Action):
     """Plots a FOOOF topography"""
 
-    def run(self):
+    def run(self, params={}):
 
         try:
             selected_name = self.data["outputs"]["fooof_report"][0]

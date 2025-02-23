@@ -18,7 +18,7 @@ from meggie.utilities.dialogs.outputOptionsMain import OutputOptions
 class SaveFooof(Action):
     """Saves FOOOF to a csv."""
 
-    def run(self):
+    def run(self, params={}):
 
         try:
             selected_name = self.data["outputs"]["fooof_report"][0]
@@ -37,13 +37,6 @@ class SaveFooof(Action):
             bands = None
 
         def option_handler(selected_option):
-            params = {
-                "name": selected_name,
-                "output_option": selected_option,
-                "channel_groups": self.experiment.channel_groups,
-                "bands": bands,
-            }
-
             default_filename = (
                 selected_name + "_all_subjects_channel_averages_fooof.csv"
                 if selected_option == "channel_averages"
@@ -58,28 +51,36 @@ class SaveFooof(Action):
             if not filepath:
                 return
 
+            params = {
+                "name": selected_name,
+                "output_option": selected_option,
+                "channel_groups": self.experiment.channel_groups,
+                "bands": bands,
+                "filepath": filepath,
+            }
+
             try:
-                self.handler(self.experiment.active_subject, filepath, params)
+                self.handler(self.experiment.active_subject, params)
             except Exception as exc:
                 exc_messagebox(self.window, exc)
 
         dialog = OutputOptions(self.window, handler=option_handler)
         dialog.show()
 
-    def handler(self, subject, filepath, params):
+    def handler(self, subject, params):
         if params["output_option"] == "channel_averages":
             save_channel_averages(
                 self.experiment,
                 params["name"],
                 params["channel_groups"],
                 params["bands"],
-                filepath,
+                params["filepath"],
                 do_meanwhile=self.window.update_ui,
             )
         else:
             save_all_channels(
                 self.experiment,
                 params["name"],
-                filepath,
+                params["filepath"],
                 do_meanwhile=self.window.update_ui,
             )

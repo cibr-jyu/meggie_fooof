@@ -14,7 +14,7 @@ from meggie_fooof.actions.fooof_create.controller.fooof import create_report
 class CreateFooof(Action):
     """Creates FOOOF from existing spectrum."""
 
-    def run(self):
+    def run(self, params={}):
 
         subject = self.experiment.active_subject
 
@@ -38,3 +38,4 @@ class CreateFooof(Action):
     def handler(self, subject, params):
         """ """
         create_report(subject, params, do_meanwhile=self.window.update_ui)
+        self.experiment.save_experiment_settings()

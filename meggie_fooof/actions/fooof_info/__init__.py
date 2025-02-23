@@ -6,7 +6,7 @@ from meggie.mainwindow.dynamic import InfoAction
 class Info(InfoAction):
     """Fills up fooof info box"""
 
-    def run(self):
+    def run(self, params={}):
 
         message = ""
         try:
