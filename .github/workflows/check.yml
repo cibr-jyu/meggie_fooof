@@ -24,6 +24,7 @@ jobs:
         pip install -r https://raw.githubusercontent.com/cibr-jyu/meggie/master/requirements.txt
         pip install -r https://raw.githubusercontent.com/cibr-jyu/meggie/master/dev-requirements.txt
         pip install git+https://github.com/cibr-jyu/meggie.git
+        pip install fooof
 
     - name: Install this package for tests
       run: |
