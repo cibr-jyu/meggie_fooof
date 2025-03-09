@@ -2,55 +2,28 @@
 
 import matplotlib.pyplot as plt
 import mne
+import numpy as np
 
 from meggie.utilities.formats import format_float
 from meggie.utilities.formats import format_floats
 from meggie.utilities.plotting import color_cycle
 from meggie.utilities.plotting import set_figure_title
+from meggie.utilities.plotting import create_channel_average_plot
 from meggie.utilities.channels import filter_info
 from meggie.utilities.channels import iterate_topography
 from meggie.utilities.channels import get_channels_by_type
 
-from fooof.objs.utils import average_fg
-
-from fooof.bands import Bands
+from fooof import FOOOFGroup
 
 
-def plot_fooof_fit(fooof_ax, fooof, report_key):
-    """ """
-    fooof.plot(
-        ax=fooof_ax,
-        plot_peaks="dot",
-        add_legend=False,
-    )
-
-    text = "Condition: {}\n".format(report_key)
-    text += "R squared: {}\nPeaks: \n".format(format_float(fooof.r_squared_))
-
-    for peak_params in fooof.peak_params_:
-        text += "{0} ({1}, {2})\n".format(*format_floats(peak_params))
-
-    fooof_ax.set_title(text)
-
-
-def get_average_bands(bands):
-    """ """
-    if not bands:
-        bands = [[0, 4], [4, 7], [7, 14], [14, 30], [30, 100]]
-    bands = dict(
-        [("band {0}".format(band_idx + 1), band) for band_idx, band in enumerate(bands)]
-    )
-    fooof_bands = Bands(bands)
-    return fooof_bands
-
-
-def get_channel_averages(
-    reports, channels_by_type, channel_groups, fooof_bands, ch_names
-):
+def get_channel_averages(report_item, channels_by_type, channel_groups, ch_names):
     """Create channel averages using fooof's own averaging function"""
+
+    reports = report_item.content
 
     averages = {}
     for key, fg in sorted(reports.items()):
+
         for ch_type in ["eeg", "mag", "grad"]:
 
             if ch_type not in channels_by_type:
@@ -78,55 +51,69 @@ def get_channel_averages(
                 ]
 
                 sub_fg = fg.get_group(idxs)
-                avg_fg = average_fg(sub_fg, fooof_bands, avg_method="mean")
+
+                # average across the original spectra
+                data = np.mean(10**sub_fg.power_spectra, axis=0)[np.newaxis, :]
+
+                # and fit a new fooof
+                avg_fg = FOOOFGroup(
+                    peak_width_limits=sub_fg.peak_width_limits,
+                    peak_threshold=sub_fg.peak_threshold,
+                    max_n_peaks=sub_fg.max_n_peaks,
+                    aperiodic_mode=sub_fg.aperiodic_mode,
+                    verbose=False,
+                )
+                avg_fg.fit(sub_fg.freqs, data, sub_fg.freq_range)
+                avg_fooof = avg_fg.get_fooof(0)
 
                 if label not in averages:
                     averages[label] = []
 
-                averages[label].append((key, avg_fg))
+                averages[label].append((key, avg_fooof))
     return averages
 
 
-def plot_fit_averages(subject, channel_groups, name, bands):
-    """ """
+def plot_fit_averages(subject, channel_groups, name):
+    """Plot channel averages of FOOOF items."""
     report_item = subject.fooof_report[name]
-    reports = report_item.content
     ch_names = report_item.params["ch_names"]
 
     raw = subject.get_raw()
     info = raw.info
 
     channels_by_type = get_channels_by_type(info)
-
-    fooof_bands = get_average_bands(bands)
     averages = get_channel_averages(
-        reports, channels_by_type, channel_groups, fooof_bands, ch_names
+        report_item, channels_by_type, channel_groups, ch_names
     )
 
-    # plot averages for each channel type separately
-    ch_types = sorted(set([label[0] for label in averages.keys()]))
-    for ch_type in ch_types:
+    # Restructure averages to align with the condition-first loop strategy
+    restructured_averages = {}
+    for label, conditions in averages.items():
+        ch_type, ch_group = label
+        for fooof_key, fooof in conditions:
+            restructured_averages.setdefault(fooof_key, {}).setdefault(ch_type, {})[
+                ch_group
+            ] = fooof
 
-        # ..and for each channel group
-        ch_groups = sorted(
-            [label[1] for label in averages.keys() if label[0] == ch_type]
-        )
-        for ch_group in ch_groups:
+    # Plot averages with new loop order: conditions first, then channel groups
+    fooof_keys = sorted(restructured_averages.keys())
+    ch_types = sorted(set(label[0] for label in averages.keys()))
 
-            # ..in a separate figure
-            fig = plt.figure()
+    for fooof_key in fooof_keys:
+        for ch_type in ch_types:
+            ch_groups = sorted(restructured_averages[fooof_key][ch_type].keys())
 
-            for idx, (fooof_key, fooof) in enumerate(averages[(ch_type, ch_group)]):
-                fooof_ax = fig.add_subplot(
-                    1, len(averages[(ch_type, ch_group)]), idx + 1
+            def plot_fun(ax_idx, ax):
+                fooof = restructured_averages[fooof_key][ch_type][ch_groups[ax_idx]]
+                fooof.plot(
+                    ax=ax,
+                    plot_peaks="dot",
+                    add_legend=False,
                 )
-                plot_fooof_fit(fooof_ax, fooof, fooof_key)
+                ax.set_title(ch_groups[ax_idx])
 
-            title = "{0} {1} {2}".format(report_item.name, ch_type, ch_group)
-            fig.suptitle(title)
-            set_figure_title(fig, title.replace(" ", "_"))
-
-            fig.tight_layout()
+            title = f"{report_item.name} {ch_type} {fooof_key}"
+            create_channel_average_plot(len(ch_groups), plot_fun, title)
 
     plt.show()
 
@@ -169,7 +156,19 @@ def plot_fit_topo(subject, name, ch_type):
         for idx, (report_key, report) in enumerate(reports.items()):
             report_ax = fig.add_subplot(1, len(reports), idx + 1)
             fooof = report.get_fooof(names_idx)
-            plot_fooof_fit(report_ax, fooof, report_key)
+            fooof.plot(
+                ax=report_ax,
+                plot_peaks="dot",
+                add_legend=True,
+            )
+
+            text = "Condition: {}\n".format(report_key)
+            text += "R squared: {}\nPeaks: \n".format(format_float(fooof.r_squared_))
+
+            for peak_params in fooof.peak_params_:
+                text += "{0} ({1}, {2})\n".format(*format_floats(peak_params))
+
+            report_ax.set_title(text)
 
         fig.tight_layout()
 

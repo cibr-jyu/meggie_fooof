@@ -3,7 +3,7 @@ name: Run Tests
 on:
   push:
     branches:
-      - '**'
+      - '*'
 
 jobs:
   build:
@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: 3.13
 
     - name: Install dependencies
       run: |
@@ -25,7 +25,7 @@ jobs:
         pip install -r https://raw.githubusercontent.com/cibr-jyu/meggie/master/dev-requirements.txt
         pip install git+https://github.com/cibr-jyu/meggie.git
 
-    - name: Install meggie_fooof for tests
+    - name: Install this package for tests
       run: |
         pip install .
 

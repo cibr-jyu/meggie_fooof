@@ -25,17 +25,6 @@ class SaveFooof(Action):
         except IndexError:
             return
 
-        config = self.window.prefs.read_config()
-        try:
-
-            def to_tuple(val):
-                return [float(x) for x in val.strip("[").strip("]").split("-")]
-
-            band_entry = config.get("meggie_fooof", "bands")
-            bands = [to_tuple(val) for val in band_entry.split(",")]
-        except Exception:
-            bands = None
-
         def option_handler(selected_option):
             default_filename = (
                 selected_name + "_all_subjects_channel_averages_fooof.csv"
@@ -55,7 +44,6 @@ class SaveFooof(Action):
                 "name": selected_name,
                 "output_option": selected_option,
                 "channel_groups": self.experiment.channel_groups,
-                "bands": bands,
                 "filepath": filepath,
             }
 
@@ -73,7 +61,6 @@ class SaveFooof(Action):
                 self.experiment,
                 params["name"],
                 params["channel_groups"],
-                params["bands"],
                 params["filepath"],
                 do_meanwhile=self.window.update_ui,
             )

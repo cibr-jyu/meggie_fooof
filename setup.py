@@ -11,9 +11,5 @@ setup(
     packages=['meggie_fooof'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-        'setuptools',
-        'meggie>=1.9.0',
-        'fooof>=1.0.0'
-    ]
+    install_requires=[]
 )

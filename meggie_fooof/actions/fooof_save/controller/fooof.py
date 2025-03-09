@@ -2,14 +2,14 @@
 
 import logging
 
+import numpy as np
+
 from meggie.utilities.filemanager import save_csv
 from meggie.utilities.channels import get_channels_by_type
 from meggie.utilities.formats import format_float
 from meggie.utilities.threading import threaded
 
-from fooof.objs.utils import average_fg
-
-from fooof.bands import Bands
+from fooof import FOOOFGroup
 
 
 COLUMN_NAMES = [
@@ -72,18 +72,10 @@ def save_all_channels(experiment, selected_name, path):
 
 
 @threaded
-def save_channel_averages(experiment, selected_name, channel_groups, bands, path):
+def save_channel_averages(experiment, selected_name, channel_groups, path):
     """ """
     row_descs = []
     csv_data = []
-
-    # set up bands
-    if not bands:
-        bands = [[0, 4], [4, 7], [7, 14], [14, 30], [30, 100]]
-    bands = dict(
-        [("band {0}".format(band_idx + 1), band) for band_idx, band in enumerate(bands)]
-    )
-    fooof_bands = Bands(bands)
 
     # for each subject
     for subject in experiment.subjects.values():
@@ -124,10 +116,23 @@ def save_channel_averages(experiment, selected_name, channel_groups, bands, path
                     ]
 
                     sub_fg = report.get_group(idxs)
-                    avg_fg = average_fg(sub_fg, fooof_bands, avg_method="mean")
+
+                    # average across the original spectra
+                    data = np.mean(10**sub_fg.power_spectra, axis=0)[np.newaxis, :]
+
+                    # and fit a new fooof
+                    avg_fg = FOOOFGroup(
+                        peak_width_limits=sub_fg.peak_width_limits,
+                        peak_threshold=sub_fg.peak_threshold,
+                        max_n_peaks=sub_fg.max_n_peaks,
+                        aperiodic_mode=sub_fg.aperiodic_mode,
+                        verbose=False,
+                    )
+                    avg_fg.fit(sub_fg.freqs, data, sub_fg.freq_range)
+                    avg_fooof = avg_fg.get_fooof(0)
 
                     # .. and create entries for them
-                    for peak in avg_fg.peak_params_:
+                    for peak in avg_fooof.peak_params_:
                         csv_data.append(
                             [
                                 format_float(peak[0]),
@@ -141,9 +146,9 @@ def save_channel_averages(experiment, selected_name, channel_groups, bands, path
                         )
                         row_descs.append((subject.name, key, ch_type, ch_group_key))
 
-                    aparams = avg_fg.aperiodic_params_
-                    rsquared = avg_fg.r_squared_
-                    mae = avg_fg.error_
+                    aparams = avg_fooof.aperiodic_params_
+                    rsquared = avg_fooof.r_squared_
+                    mae = avg_fooof.error_
                     csv_data.append(
                         [
                             "",
