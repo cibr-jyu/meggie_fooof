@@ -17,3 +17,4 @@ preferences.cfg
 .settings/
 .eggs
 .meggie-env
+.aider*
