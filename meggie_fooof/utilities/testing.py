@@ -1,9 +1,4 @@
-import pkg_resources
-
 from fooof import FOOOFGroup
-
-import os
-import json
 
 from meggie_fooof.datatypes.fooof_report.fooof_report import FOOOFReport
 
@@ -61,13 +56,6 @@ def create_fooof_experiment(experiment_folder, experiment_name, n_subjects=2):
 
 
 class BaseFooofTestAction(BaseTestAction):
-
-    def load_action_spec(self, action_name):
-        action_path = pkg_resources.resource_filename("meggie_fooof", "actions")
-        config_path = os.path.join(action_path, action_name, "configuration.json")
-        with open(config_path, "r") as f:
-            action_spec = json.load(f)
-        return action_spec
 
     def setup_experiment(self):
         self.experiment = create_fooof_experiment(self.dirpath, "test_experiment")
