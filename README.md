@@ -4,8 +4,8 @@ meggie\_fooof is a plugin for meggie that provides basic interface to FOOOF func
 
 ## Installation
 
-1. Activate the meggie environment
-1. Then install: python -m pip install fooof meggie\_fooof
+1. Activate the existing meggie environment
+1. Then install: python -m pip install meggie\_fooof
 
 ## Usage
 

@@ -1,10 +1,20 @@
 Changelog
 =========
 
-0.3.2 (unreleased)
+0.4.1 (unreleased)
 -----------------
 
 - nothing changed yet
+
+
+0.4.0 (2025-03-17)
+-----------------
+
+- Add tests
+- Update channel average logic to first average over spectrums and then fit
+- Replace timestamped output folder with user-selectable destination for csv's
+- Upgrade to work with meggie 1.9.0
+- Migrate to pyproject.toml
 
 0.3.1 (2024-03-19)
 -----------------
