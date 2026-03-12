@@ -1,11 +1,15 @@
 Changelog
 =========
 
-0.4.1 (unreleased)
+0.4.2 (unreleased)
 -----------------
 
 - nothing changed yet
 
+0.4.1 (2026-03-12)
+-----------------
+
+- Fix channel group related crash for eeg-only data
 
 0.4.0 (2025-03-17)
 -----------------

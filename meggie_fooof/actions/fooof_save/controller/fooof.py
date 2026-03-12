@@ -11,7 +11,6 @@ from meggie.utilities.threading import threaded
 
 from fooof import FOOOFGroup
 
-
 COLUMN_NAMES = [
     "CF",
     "Amp",

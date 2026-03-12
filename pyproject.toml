@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "meggie_fooof"
-version = "0.4.0"
+version = "0.4.1"
 description = "FOOOF plugin for Meggie"
 license = { text = "BSD" }
 dependencies = [
@@ -18,7 +18,7 @@ homepage = "https://github.com/cibr-jyu/meggie_fooof"
 [project.optional-dependencies]
 dev = [
     "black",
-    "pylama",
+    "ruff",
     "pytest",
     "pytest-qt",
     "build",
@@ -27,8 +27,25 @@ dev = [
 ]
 test = [
     "black",
-    "pylama",
+    "ruff",
     "pytest",
     "pytest-qt",
     "setuptools",
 ]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = [
+    "E501",
+    "E203",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 999
+
+[tool.ruff.lint.per-file-ignores]
+"*Ui.py" = ["F401"]

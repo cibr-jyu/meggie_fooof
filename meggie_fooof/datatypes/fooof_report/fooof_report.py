@@ -6,8 +6,10 @@ import logging
 
 from fooof import FOOOFGroup
 
+from meggie.utilities.datatype import Datatype
 
-class FOOOFReport(object):
+
+class FOOOFReport(Datatype):
     """Container for FOOOF report data that can be handled by meggie"""
 
     def __init__(self, name, fooof_directory, params, content=None):
